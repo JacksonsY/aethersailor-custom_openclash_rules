@@ -1,26 +1,6 @@
 name: Purge jsDelivr Cache
 
 on:
-  push:
-    paths:
-      - 'cfg/**'
-      - 'rule/**'
-      - 'game_rule/**'
-      - 'shell/**'
-      - 'overwrite/**'
-      - '!**/archived/**'
-      - '!**/README.md'
-      - '!README.md'
-
-  workflow_run:
-    workflows:
-      - Auto generate rules
-      - Auto update mainland config
-      - Auto Update Game CDN Rules
-      - Sync and Modify Custom_Clash.ini
-    types:
-      - completed
-
   workflow_dispatch:  # 支持手动触发
 
 env:

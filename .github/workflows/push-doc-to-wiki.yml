@@ -2,9 +2,6 @@ name: Sync doc to Wiki
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'doc/**'
 
 permissions:
   contents: write

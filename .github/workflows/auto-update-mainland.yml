@@ -1,9 +1,6 @@
 name: Auto update mainland config
 
 on:
-  push:
-    paths:
-      - cfg/Custom_Clash.ini
   workflow_dispatch:
 
 permissions:

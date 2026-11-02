@@ -1,9 +1,6 @@
 name: Auto generate rules
 
 on:
-  push:
-    paths:
-      - 'rule/*.list'
   workflow_dispatch:
 
 permissions:

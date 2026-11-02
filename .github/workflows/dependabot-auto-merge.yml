@@ -1,8 +1,12 @@
 name: Dependabot auto-merge
 
 on:
-  pull_request_target:
-    types: [opened, reopened, synchronize, ready_for_review, labeled]
+  workflow_dispatch:
+    inputs:
+      pull_request:
+        description: Dependabot pull request number
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -10,14 +14,20 @@ permissions:
 
 jobs:
   enable-automerge:
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'automerge')
     runs-on: ubuntu-latest
     steps:
       - name: Enable auto-merge
+        env:
+          PR_NUMBER: ${{ inputs.pull_request }}
         uses: actions/github-script@v8
         with:
           script: |
-            const pr = context.payload.pull_request;
+            const number = Number(process.env.PR_NUMBER);
+            if (!Number.isSafeInteger(number) || number < 1) throw new Error('Invalid pull request number');
+            const { data: pr } = await github.rest.pulls.get({ ...context.repo, pull_number: number });
+            if (pr.user.login !== 'dependabot[bot]' || !pr.labels.some(label => label.name === 'automerge')) {
+              throw new Error('Pull request must be from Dependabot and have the automerge label');
+            }
             await github.graphql(
               `mutation($pullRequestId: ID!, $mergeMethod: PullRequestMergeMethod!) {
                 enablePullRequestAutoMerge(input: {pullRequestId: $pullRequestId, mergeMethod: $mergeMethod}) {

@@ -1,9 +1,6 @@
 name: Auto Update Game CDN Rules
 
 on:
-  schedule:
-    # 每 8 小时运行一次（UTC 0:00, 8:00, 16:00）
-    - cron: '0 */8 * * *'
   workflow_dispatch:  # 支持手动触发
 
 permissions:
